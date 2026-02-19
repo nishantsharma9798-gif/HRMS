@@ -79,7 +79,7 @@ npm run dev
 
 Frontend starts at `http://localhost:5173`.
 
-Set backend URL (optional):
+Set backend URL (required for deployed frontend):
 
 ```bash
 # frontend/.env
@@ -106,13 +106,15 @@ VITE_API_BASE_URL=http://localhost:8000/api
    - `DJANGO_SECRET_KEY=<secure-value>`
    - `DJANGO_ALLOWED_HOSTS=<render-domain>`
    - `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_HOST`, `POSTGRES_PORT`
-   - `CORS_ALLOWED_ORIGINS=<vercel-frontend-url>`
+   - `CORS_ALLOWED_ORIGINS=https://<your-vercel-domain>`
+   - `CORS_ALLOW_ALL_ORIGINS=False` (recommended in production)
 
 ### Frontend on Vercel (React)
 1. Import repo and set root directory to `frontend`.
 2. Framework preset: `Vite`.
-3. Add env variable:
+3. Add env variable (mandatory):
    - `VITE_API_BASE_URL=https://<your-render-domain>/api`
+4. Redeploy frontend after saving env var changes.
 
 ## Assumptions / Limitations
 
@@ -120,3 +122,12 @@ VITE_API_BASE_URL=http://localhost:8000/api
 - Employee email is unique for consistency.
 - Attendance can be marked once per employee per date.
 - No edit/update flow included (add/list/delete + attendance create/view only).
+
+
+## Common Deployment Fixes
+
+If frontend calls `localhost` after deployment, your frontend environment variable is missing.
+
+- Set `VITE_API_BASE_URL` in the frontend hosting dashboard to your live backend URL (e.g. `https://api-name.onrender.com/api`).
+- Make sure backend CORS includes your frontend URL in `CORS_ALLOWED_ORIGINS`.
+- Redeploy both services after env changes.
