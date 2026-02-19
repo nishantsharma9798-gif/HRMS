@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import AttendanceManager from './components/AttendanceManager';
 import EmployeeForm from './components/EmployeeForm';
 import EmployeeTable from './components/EmployeeTable';
-import { createEmployee, deleteEmployee, getAttendance, getEmployees, markAttendance } from './api';
+import { createEmployee, deleteEmployee, getApiConfigError, getAttendance, getEmployees, markAttendance } from './api';
 
 export default function App() {
   const [employees, setEmployees] = useState([]);
   const [attendanceRows, setAttendanceRows] = useState([]);
   const [loadingEmployees, setLoadingEmployees] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState(getApiConfigError());
   const [success, setSuccess] = useState('');
 
   const loadEmployees = async () => {

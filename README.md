@@ -79,7 +79,7 @@ npm run dev
 
 Frontend starts at `http://localhost:5173`.
 
-Set backend URL (required for deployed frontend):
+Set backend URL (required for deployed frontend and must be set before build):
 
 ```bash
 # frontend/.env
@@ -126,8 +126,9 @@ VITE_API_BASE_URL=https://<your-backend-domain>/api
 
 ## Common Deployment Fixes
 
-If frontend calls `localhost` after deployment, your frontend environment variable is missing.
+If frontend shows 404 on `/api` or cannot load data after deployment, your frontend backend URL is likely missing or incorrect.
 
 - Set `VITE_API_BASE_URL` in the frontend hosting dashboard to your live backend URL (e.g. `https://api-name.onrender.com/api`). This is mandatory for deployment.
 - Make sure backend CORS includes your frontend URL in `CORS_ALLOWED_ORIGINS`.
+- Verify `VITE_API_BASE_URL` includes `/api` (example: `https://api-name.onrender.com/api`).
 - Redeploy both services after env changes.
