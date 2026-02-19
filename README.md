@@ -83,7 +83,7 @@ Set backend URL (required for deployed frontend):
 
 ```bash
 # frontend/.env
-VITE_API_BASE_URL=http://localhost:8000/api
+VITE_API_BASE_URL=https://<your-backend-domain>/api
 ```
 
 ## API Endpoints
@@ -128,6 +128,6 @@ VITE_API_BASE_URL=http://localhost:8000/api
 
 If frontend calls `localhost` after deployment, your frontend environment variable is missing.
 
-- Set `VITE_API_BASE_URL` in the frontend hosting dashboard to your live backend URL (e.g. `https://api-name.onrender.com/api`).
+- Set `VITE_API_BASE_URL` in the frontend hosting dashboard to your live backend URL (e.g. `https://api-name.onrender.com/api`). This is mandatory for deployment.
 - Make sure backend CORS includes your frontend URL in `CORS_ALLOWED_ORIGINS`.
 - Redeploy both services after env changes.
