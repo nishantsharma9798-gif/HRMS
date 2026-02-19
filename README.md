@@ -99,7 +99,7 @@ VITE_API_BASE_URL=https://<your-backend-domain>/api
 ### Backend on Render (Django)
 1. Create a new Web Service from the `backend` folder.
 2. Build command: `pip install -r requirements.txt && python manage.py migrate`
-3. Start command: `gunicorn hrms_backend.wsgi:application`
+3. Start command: `gunicorn hrms_backend.wsgi:application --bind 0.0.0.0:$PORT`
 4. Ensure service root points to repository root or `backend`, and use ASGI entrypoint `main:app` when a platform requires auto-discovery from repo root.
 5. Add environment variables:
    - `DJANGO_DEBUG=False`
@@ -108,6 +108,13 @@ VITE_API_BASE_URL=https://<your-backend-domain>/api
    - `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_HOST`, `POSTGRES_PORT`
    - `CORS_ALLOWED_ORIGINS=https://<your-vercel-domain>`
    - `CORS_ALLOW_ALL_ORIGINS=False` (recommended in production)
+
+
+For platforms that read a Procfile, `backend/Procfile` is included with:
+
+```
+web: gunicorn hrms_backend.wsgi:application --bind 0.0.0.0:$PORT
+```
 
 ### Frontend on Vercel (React)
 1. Import repo and set root directory to `frontend`.
