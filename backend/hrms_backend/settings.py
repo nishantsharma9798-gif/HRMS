@@ -4,8 +4,18 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'unsafe-dev-secret-key')
-DEBUG = os.getenv('DJANGO_DEBUG', 'True').lower() == 'true'
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() == 'true'
+
+
+def _split_env_list(value):
+    return [item.strip() for item in value.split(',') if item.strip()]
+
+
+allowed_hosts = _split_env_list(os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1'))
+render_external_hostname = os.getenv('RENDER_EXTERNAL_HOSTNAME', '').strip()
+if render_external_hostname and render_external_hostname not in allowed_hosts:
+    allowed_hosts.append(render_external_hostname)
+ALLOWED_HOSTS = allowed_hosts
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -91,3 +101,6 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': ['rest_framework.renderers.JSONRenderer'],
     'DEFAULT_PARSER_CLASSES': ['rest_framework.parsers.JSONParser'],
 }
+
+# Trust proxy headers on managed platforms (e.g., Render/Cloudflare).
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 const normalizeBaseUrl = (value) => value?.replace(/\/+$/, '');
+const DEPLOYED_BACKEND_API_URL = 'https://hrms-4b7o.onrender.com/api';
 
 const getApiConfig = () => {
   const configured = normalizeBaseUrl(import.meta.env.VITE_API_BASE_URL);
@@ -13,19 +14,18 @@ const getApiConfig = () => {
     if (isLocalhost) {
       return { baseURL: 'http://localhost:8000/api', configError: '' };
     }
+
+    // Default deployed API target requested for this project.
+    return { baseURL: DEPLOYED_BACKEND_API_URL, configError: '' };
   }
 
-  return {
-    baseURL: null,
-    configError:
-      'Backend API URL is not configured. Set VITE_API_BASE_URL to your deployed backend URL (example: https://your-backend.onrender.com/api).',
-  };
+  return { baseURL: DEPLOYED_BACKEND_API_URL, configError: '' };
 };
 
 const { baseURL, configError } = getApiConfig();
 
 const api = axios.create({
-  baseURL: baseURL || undefined,
+  baseURL,
   timeout: 10000,
 });
 

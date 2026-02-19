@@ -102,9 +102,9 @@ VITE_API_BASE_URL=https://<your-backend-domain>/api
 3. Start command: `gunicorn hrms_backend.wsgi:application --bind 0.0.0.0:$PORT`
 4. Ensure service root points to repository root or `backend`, and use ASGI entrypoint `main:app` when a platform requires auto-discovery from repo root.
 5. Add environment variables:
-   - `DJANGO_DEBUG=False`
+   - `DJANGO_DEBUG=False` (important: do not deploy with `True`)
    - `DJANGO_SECRET_KEY=<secure-value>`
-   - `DJANGO_ALLOWED_HOSTS=<render-domain>`
+   - `DJANGO_ALLOWED_HOSTS=<render-domain>` (or rely on `RENDER_EXTERNAL_HOSTNAME` auto-detection)
    - `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_HOST`, `POSTGRES_PORT`
    - `CORS_ALLOWED_ORIGINS=https://<your-vercel-domain>`
    - `CORS_ALLOW_ALL_ORIGINS=False` (recommended in production)
@@ -120,7 +120,7 @@ web: gunicorn hrms_backend.wsgi:application --bind 0.0.0.0:$PORT
 1. Import repo and set root directory to `frontend`.
 2. Framework preset: `Vite`.
 3. Add env variable (mandatory):
-   - `VITE_API_BASE_URL=https://<your-render-domain>/api`
+   - `VITE_API_BASE_URL=https://hrms-4b7o.onrender.com/api`
 4. Redeploy frontend after saving env var changes.
 
 ## Assumptions / Limitations
@@ -135,7 +135,15 @@ web: gunicorn hrms_backend.wsgi:application --bind 0.0.0.0:$PORT
 
 If frontend shows 404 on `/api` or cannot load data after deployment, your frontend backend URL is likely missing or incorrect.
 
-- Set `VITE_API_BASE_URL` in the frontend hosting dashboard to your live backend URL (e.g. `https://api-name.onrender.com/api`). This is mandatory for deployment.
+- Set `VITE_API_BASE_URL` in the frontend hosting dashboard to your live backend URL (`https://hrms-4b7o.onrender.com/api`). This is mandatory for deployment.
 - Make sure backend CORS includes your frontend URL in `CORS_ALLOWED_ORIGINS`.
-- Verify `VITE_API_BASE_URL` includes `/api` (example: `https://api-name.onrender.com/api`).
+- Verify `VITE_API_BASE_URL` includes `/api` (value used in this project: `https://hrms-4b7o.onrender.com/api`).
 - Redeploy both services after env changes.
+
+
+### DisallowedHost on Render
+If you see `Invalid HTTP_HOST header` / `DisallowedHost`, your allowed hosts are not configured for the deployed hostname.
+
+- Set `DJANGO_ALLOWED_HOSTS` to include your Render hostname (example: `hrms-4b7o.onrender.com`).
+- Keep `DJANGO_DEBUG=False` in production.
+- This project also auto-adds `RENDER_EXTERNAL_HOSTNAME` when provided by Render.
