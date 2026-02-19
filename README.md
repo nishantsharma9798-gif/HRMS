@@ -100,7 +100,8 @@ VITE_API_BASE_URL=http://localhost:8000/api
 1. Create a new Web Service from the `backend` folder.
 2. Build command: `pip install -r requirements.txt && python manage.py migrate`
 3. Start command: `gunicorn hrms_backend.wsgi:application`
-4. Add environment variables:
+4. Ensure service root points to repository root or `backend`, and use ASGI entrypoint `main:app` when a platform requires auto-discovery from repo root.
+5. Add environment variables:
    - `DJANGO_DEBUG=False`
    - `DJANGO_SECRET_KEY=<secure-value>`
    - `DJANGO_ALLOWED_HOSTS=<render-domain>`
